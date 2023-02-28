@@ -1,0 +1,21 @@
+---
+# This playbook install requirements.
+
+- src: ansistrano.deploy
+  version: 3.14.0
+- src: ansistrano.rollback
+  version: 3.1.0
+- src: geerlingguy.apache
+  version: 3.3.0
+- src: geerlingguy.composer
+  version: 1.9.2
+- src: geerlingguy.mysql
+  version: 4.3.2
+- src: geerlingguy.php
+  version: 4.8.0
+- src: geerlingguy.php-versions
+  version: 5.0.1
+- src: geerlingguy.php-mysql
+  version: 2.1.0
+- src: opdavies.drupal_settings_files
+  version: 0.2.0

@@ -1,0 +1,12 @@
+---
+fully_qualified_domain_name: example.com  # Important! You must still edit Trusted Host settings on line 33 of tools/ansible/vars/deploy_vars.yml.
+
+ansistrano_current_dir: current  # Why would you ever change this? Don't do it.
+
+database_name: "{{ vault_database_name }}"
+database_password: "{{ vault_database_password }}"
+database_user: "{{ vault_database_user }}"
+
+project_source_path: /path/to/website/project/root/  # The trailing slash is critical!
+project_deploy_path: "/var/www/html/{{ fully_qualified_domain_name }}"
+project_web_root: web

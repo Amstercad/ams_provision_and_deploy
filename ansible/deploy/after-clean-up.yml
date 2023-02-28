@@ -1,0 +1,41 @@
+---
+- name: Synchronization of src on the control machine to dest on the remote hosts
+  ansible.posix.synchronize:
+    src: "/path/to/project/root/"
+    dest: "/var/www/html/example.com/shared/web/sites/default/files/"
+    checksum: true
+    times: false
+
+- name: Restore database
+  community.mysql.mysql_db:
+    name: drupal
+    state: import
+    target: /var/www/html/example.com/current/databasebackup.sql
+
+- name: uninstall webprofiler
+  command: vendor/drush/drush/drush pm:uninstall webprofiler
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}"
+  become: yes
+  become_user: www-data
+
+- name: reset css.preprocess
+  command: vendor/drush/drush/drush -y config-set system.performance css.preprocess 0
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}"
+  become: yes
+  become_user: www-data
+
+- name: reset js.preprocess
+  command: vendor/drush/drush/drush -y config-set system.performance js.preprocess 0
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}"
+  become: yes
+  become_user: www-data
+
+- name: clear cache
+  command: vendor/drush/drush/drush -y config-set system.performance js.preprocess 0
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}"
+  become: yes
+  become_user: www-data

@@ -1,0 +1,29 @@
+---
+- name: Allow to read and write into 'project_deploy_path'
+  file:
+    path: "{{ project_deploy_path }}"
+    mode: u=rwx,g=rwx,o=rwx
+    owner: www-data
+    group: www-data
+    state: directory
+    recurse: yes
+
+- name: Allow to read and write into 'project_deploy_path'/sites/default/files
+  file:
+    path: "{{ project_deploy_path }}/web/sites/default/files"
+    mode: u=rwx,g=rwx,o=rwx
+    owner: www-data
+    group: www-data
+    state: directory
+    recurse: yes
+
+- name: composer install
+  command: composer install
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}"
+  become: yes
+  become_user: www-data
+
+- name: Generate settings.php file
+  include_role:
+    name: opdavies.drupal_settings_files

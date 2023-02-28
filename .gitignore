@@ -1,6 +1,0 @@
-.vagrant/
-tools/ansible/.roles/
-vendor/
-web/
-.editorconfig
-.gitattributes

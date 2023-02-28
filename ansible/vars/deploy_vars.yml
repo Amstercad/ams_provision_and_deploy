@@ -1,0 +1,40 @@
+---
+ansistrano_allow_anonymous_stats: false
+ansistrano_keep_releases: 3
+
+release_drupal_path: "{{ ansistrano_release_path.stdout }}/{{ project_web_root }}"
+release_drush_path: "{{ ansistrano_release_path.stdout }}/vendor/bin/drush"
+
+drupal_hash_salt: "{{ vault_drupal_hash_salt }}"
+drupal_install: true
+
+composer_home_owner: www-data
+composer_home_group: www-data
+composer_keep_updated: true
+
+drupal_settings:
+  - drupal_root: '{{ release_drupal_path }}'
+    sites:
+      - name: default
+        settings:
+          databases:
+            default:
+              default:
+                driver: mysql
+                host: localhost
+                database: '{{ database_name }}'
+                username: '{{ database_user }}'
+                password: '{{ database_password }}'
+          hash_salt: '{{ drupal_hash_salt }}'
+          config_directories:
+            sync: ../config/sync
+          # refer to this document in order to format your trusted host definitions accurately.
+          trusted_hosts:
+            - '^example\.com$'
+          file_temp_path:
+            - '/tmp/'
+          extra_parameters: |
+            $settings['config_sync_directory'] = '../config/sync';
+
+            $settings['deployment_identifier'] = '{{ ansistrano_release_version }}';
+            $config['system.site']['name'] = '{{ fully_qualified_domain_name }}';
